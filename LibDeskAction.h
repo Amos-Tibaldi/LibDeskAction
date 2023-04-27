@@ -59,8 +59,8 @@ namespace LibDeskActionNamespace
 		HWND GetUnderTheMouseWindowHandler();
 		bool GetMouseAbsoluteScreenPosition(int * x, int * y);
 		bool GetClientPixelsFromWindow(HWND hwnd, unsigned char * mb);
-		bool GetWindowClassName(HWND hwnd, char * className, int bufSize);
-		bool GetWindowTitleAndSize(HWND hwnd, char * title, int titleSize, int * xsize, int * ysize);
+		bool GetWindowClassName(HWND hwnd, wchar_t * className, int bufSize);
+		bool GetWindowTitleAndSize(HWND hwnd, wchar_t * title, int titleSize, int * xsize, int * ysize);
 		HWND GetWindowParent(HWND hwnd);
 		HWND GetAncestorWindow(HWND hwnd);
 
@@ -90,7 +90,7 @@ namespace LibDeskActionNamespace
 	class DXWindow {
 
 	public:
-		DXWindow(char * theWindowTitle, int ww, int hh, bool WaitVSync);
+		DXWindow(const wchar_t * theWindowTitle, int ww, int hh, bool WaitVSync);
 		~DXWindow();
 		LRESULT CALLBACK MyMsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		void SetRGBAtXY(int r, int g, int b, int x, int y);
@@ -109,7 +109,7 @@ namespace LibDeskActionNamespace
 		HINSTANCE instance;
 		WNDCLASS window_class;
 		bool mycond;
-		char class_name[200];
+		wchar_t class_name[200];
 		bool is_app_fullscreen;
 		int window_width;
 		int window_height;
@@ -156,7 +156,7 @@ typedef void * LDADXWINDOWHANDLE;
 
 #ifdef __cplusplus
 extern "C" {
-	LDADXWINDOWHANDLE LDACreateDXWindow(char * title, int width, int height);
+	LDADXWINDOWHANDLE LDACreateDXWindow(const wchar_t * title, int width, int height);
 	void LDADXWindowDestroy(LDADXWINDOWHANDLE win);
 	void LDADXWindowDisplayBuffer(LDADXWINDOWHANDLE win, unsigned char * bfr);
 	void LDAInitializeLibDeskAction();

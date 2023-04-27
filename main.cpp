@@ -41,7 +41,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	unsigned char r, g, b;
 	LDAGrabWindowOfInterest(&winxsize, &winysize);
 	unsigned char * RGBbuffer = new unsigned char [winxsize * winysize * 3];
-	LDADXWINDOWHANDLE dxw = LDACreateDXWindow("DebugWindow", winxsize, winysize);
+	LDADXWINDOWHANDLE dxw = LDACreateDXWindow(L"DebugWindow", winxsize, winysize);
 	unsigned char * dxwARGBbuffer = new unsigned char [winxsize * winysize * 4];
 	while(!LDAAppShouldExit())
 	{

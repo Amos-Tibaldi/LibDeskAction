@@ -242,7 +242,7 @@ namespace LibDeskActionNamespace
 		delete pData;
 	}
 
-	bool DesktopUtilities::GetWindowClassName(HWND hwnd, char * className, int bufSize)
+	bool DesktopUtilities::GetWindowClassName(HWND hwnd, wchar_t * className, int bufSize)
 	{
 		LPTSTR lpcn = className;
 		int charWritten = GetClassName(hwnd,
@@ -251,7 +251,7 @@ namespace LibDeskActionNamespace
 		if (charWritten != 0) return true; else return false;
 	}
 
-	bool DesktopUtilities::GetWindowTitleAndSize(HWND hwnd, char * title, int titleSize, int * xsiz, int * ysiz)
+	bool DesktopUtilities::GetWindowTitleAndSize(HWND hwnd, wchar_t * title, int titleSize, int * xsiz, int * ysiz)
 	{
 		LPTSTR lpt = title;
 		int charWritten = GetWindowText(hwnd, lpt, titleSize);
@@ -282,7 +282,7 @@ namespace LibDeskActionNamespace
 	{
 		int x, y;
 		HWND hwndson;
-		char nomeWOI[200];
+		wchar_t nomeWOI[200];
 
 		WaitLongMouseClick();
 		if (GetMouseAbsoluteScreenPosition(&x, &y))
@@ -355,7 +355,7 @@ namespace LibDeskActionNamespace
 		DeleteCriticalSection(&PixelBuffer.mutex);
 	}
 
-	DXWindow::DXWindow(char * theWindowTitle, int ww, int hh, bool WaitVSync)
+	DXWindow::DXWindow(const wchar_t * theWindowTitle, int ww, int hh, bool WaitVSync)
 	{
 		InitializeCriticalSection(&PixelBuffer.mutex);
 		InitializeConditionVariable(&PixelBuffer.cond_not_empty);
@@ -376,7 +376,7 @@ namespace LibDeskActionNamespace
 		nCmdShow = SW_SHOW;
 		instance = GetModuleHandle(NULL);
 
-		sprintf_s(class_name, 199, "CN%s", theWindowTitle);
+		wsprintf(class_name, L"CN%s", theWindowTitle);
 		window_class.style = CS_OWNDC;
 		window_class.cbClsExtra = 0;
 		window_class.cbWndExtra = 0;
@@ -389,7 +389,7 @@ namespace LibDeskActionNamespace
 		window_class.lpfnWndProc = (WNDPROC)WndProc;
 
 		if (!RegisterClass(&window_class)) {
-			MessageBox(p_window, "Error during registration", "Error", MB_OK);
+			MessageBox(p_window, L"Error during registration", L"Error", MB_OK);
 			return;
 		}
 
@@ -424,11 +424,11 @@ namespace LibDeskActionNamespace
 			NULL);        //pointer to window-creation data
 
 		if (!p_window) {
-			MessageBox(NULL, "Cannot create window", NULL, MB_OK);
+			MessageBox(NULL, L"Cannot create window", NULL, MB_OK);
 			exit(-1);
 		}
 
-		SetWindowLongPtr(p_window, GWLP_USERDATA, (long)this);
+		SetWindowLongPtr(p_window, GWLP_USERDATA, (long long)this);
 
 		if (is_app_fullscreen) {
 			ShowCursor(FALSE);
@@ -436,7 +436,7 @@ namespace LibDeskActionNamespace
 
 		g_D3D = Direct3DCreate9(D3D_SDK_VERSION);
 		if (!g_D3D) {
-			MessageBox(p_window, "Error creating Direct3DCreate9", "Error", MB_OK);
+			MessageBox(p_window, L"Error creating Direct3DCreate9", L"Error", MB_OK);
 			exit(-1);
 		}
 
@@ -463,7 +463,7 @@ namespace LibDeskActionNamespace
 			&pp,
 			&p_device);
 		if (FAILED(hr)) {
-			MessageBox(p_window, "Error creating Direct3D device with hardware acceleration", "Error", MB_OK);
+			MessageBox(p_window, L"Error creating Direct3D device with hardware acceleration", L"Error", MB_OK);
 			exit(-1);
 		}
 
@@ -478,7 +478,7 @@ namespace LibDeskActionNamespace
 
 		if (FAILED(Result))
 		{
-			MessageBox(p_window, "FrontBuffer failed.", "Error", MB_OK);
+			MessageBox(p_window, L"FrontBuffer failed.", L"Error", MB_OK);
 			exit(-1);
 		}
 
@@ -656,7 +656,7 @@ namespace LibDeskActionNamespace
 
 using namespace LibDeskActionNamespace;
 
-LDADXWINDOWHANDLE LDACreateDXWindow(char * title, int width, int height)
+LDADXWINDOWHANDLE LDACreateDXWindow(const wchar_t * title, int width, int height)
 {
 	DXWindow * p = new DXWindow(title, width, height, true);
 	return (LDADXWINDOWHANDLE)p;
